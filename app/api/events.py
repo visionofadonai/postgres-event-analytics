@@ -30,3 +30,26 @@ def create_event(payload: EventIn):
         cur.close()
         conn.close()
     return {"status": "ok"}
+
+@router.get("/metrics/events-per-hour")
+def events_per_hour():
+    conn = get_conn()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT date_trunc('hour', occurred_at) AS hour,
+               count(*)
+        FROM events
+        GROUP BY hour
+        ORDER BY hour;
+    """)
+
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return [
+        {"hour": str(r[0]), "count": r[1]}
+        for r in rows
+    ]

@@ -3,7 +3,10 @@ import uuid, random, time
 from datetime import datetime, timezone
 import psycopg2
 from psycopg2.extras import Json, execute_values
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 DB = {
     "dbname": os.getenv("DB_NAME"), 
@@ -43,4 +46,4 @@ def main(batch_size=1000, total=10000):
     conn.close()
 
 if __name__ == "__main__":
-    main()
+    main(batch_size=2000, total=100000)
