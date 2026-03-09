@@ -53,3 +53,25 @@ def events_per_hour():
         {"hour": str(r[0]), "count": r[1]}
         for r in rows
     ]
+
+@router.get("/metrics/events-by-type")
+def events_by_type():
+    conn = get_conn()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT event_type, count(*)
+        FROM events
+        GROUP BY event_type
+        ORDER BY count DESC;
+    """)
+
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return [
+        {"event_type": r[0], "count": r[1]}
+        for r in rows
+    ]
