@@ -1,310 +1,224 @@
-# PostgreSQL Event Analytics Service (Portfolio Project)
+# PostgreSQL Event Analytics Service
 
-## Project Goal
+A small backend system that simulates a production-style **event analytics pipeline**.
 
-Build a production-style backend system that demonstrates practical
-PostgreSQL engineering, Python backend development, and Linux deployment
-skills.
+This project demonstrates practical database engineering, backend development, and performance tuning using PostgreSQL and Python.
 
-This project simulates an **event analytics platform** similar to
-systems used in real products to track user behavior.
+The goal is to showcase **real engineering practices** rather than tutorial-style code.
 
-The goal is to demonstrate:
+---
 
--   PostgreSQL schema design
--   Indexing strategies
--   Query optimization using EXPLAIN ANALYZE
--   Python API development (FastAPI)
--   Backend architecture patterns
--   Linux service deployment using Nginx
--   Professional documentation suitable for recruiters
+# Project Overview
 
-This project is designed to be completed over **12 weeks of part‑time
-work (evenings/weekends)**.
+Modern applications collect large volumes of user activity events such as:
 
-------------------------------------------------------------------------
+* page views
+* clicks
+* signups
+* purchases
 
-# System Architecture
+These events must be stored efficiently and queried for analytics.
 
-Client / Event Generator \| v FastAPI Application (Python) \| v
-PostgreSQL Database \| v Aggregated Metrics Tables \| v Nginx Reverse
-Proxy
+This project simulates a simplified **event tracking platform** similar to systems used in analytics products and SaaS platforms.
 
-------------------------------------------------------------------------
+---
 
-# Core Features
+# Architecture
+
+```
+Event Generator Script
+        │
+        ▼
+FastAPI Backend API
+        │
+        ▼
+PostgreSQL Database
+        │
+        ▼
+Analytics Queries / Metrics
+```
+
+Components:
+
+| Component               | Technology    |
+| ----------------------- | ------------- |
+| API Framework           | FastAPI       |
+| Database                | PostgreSQL    |
+| Language                | Python        |
+| Server OS               | Ubuntu Server |
+| Development Environment | VirtualBox VM |
+| Database Tooling        | pgAdmin       |
+
+---
+
+# Features
 
 ### Event ingestion
 
-Application receives simulated events such as:
+Events are stored with flexible metadata using JSONB.
 
--   page_view
--   click
--   signup
--   purchase
+Example event:
 
-### Queryable API
+```json
+{
+  "user_id": "11111111-1111-1111-1111-111111111111",
+  "event_type": "page_view",
+  "properties": {
+    "page": "/product/12",
+    "value": 0.42
+  }
+}
+```
 
-Example endpoints:
+---
 
-POST /events\
-GET /events\
-GET /metrics
+### REST API
 
-### Data engineering components
+Endpoints currently implemented:
 
--   Time-series event storage
--   Partitioned PostgreSQL tables
--   JSONB event properties
--   Query optimization
--   Aggregated analytics tables
-
-------------------------------------------------------------------------
-
-# Technology Stack
-
-  Layer             Technology
-  ----------------- ---------------
-  OS                Ubuntu Server
-  Database          PostgreSQL
-  Backend           Python
-  API Framework     FastAPI
-  Reverse Proxy     Nginx
-  DB Management     pgAdmin
-  Version Control   Git + GitHub
-
-------------------------------------------------------------------------
-
-# Database Schema (Concept)
-
-events
-
-  column        type
-  ------------- -------------
-  event_id      BIGSERIAL
-  user_id       UUID
-  event_type    TEXT
-  properties    JSONB
-  occurred_at   TIMESTAMPTZ
-
-Indexes to implement later:
-
--   event_type + occurred_at
--   partial index on purchase events
--   GIN index on JSONB properties
-
-------------------------------------------------------------------------
-
-# 12 Week Milestone Plan
-
-## Week 1 --- Project Initialization
-
-Deliverables:
-
--   GitHub repository created
--   README committed
--   SSH access confirmed
--   PostgreSQL connection verified
-
-Tasks:
-
--   install git
--   create project folder
--   create python virtual environment
--   connect to postgres using psql
--   confirm pgadmin connection
-
-------------------------------------------------------------------------
-
-## Week 2 --- Database Design
-
-Deliverables:
-
--   SQL schema file committed
--   events table created
-
-Tasks:
-
--   design event schema
--   create SQL migration script
--   test inserts manually
--   add initial indexes
-
-------------------------------------------------------------------------
-
-## Week 3 --- Data Generator
-
-Deliverables:
-
--   Python script generating synthetic events
-
-Tasks:
-
--   generate fake user IDs
--   randomly create events
--   insert into PostgreSQL
--   verify row growth
-
-------------------------------------------------------------------------
-
-## Week 4 --- Query Exploration
-
-Deliverables:
-
--   example query scripts
-
-Tasks:
-
--   write queries for:
-    -   events by type
-    -   events by user
-    -   events by time window
--   run EXPLAIN ANALYZE
--   record performance notes
-
-------------------------------------------------------------------------
-
-## Week 5 --- FastAPI Setup
-
-Deliverables:
-
--   FastAPI server running locally
-
-Tasks:
-
--   install fastapi
--   install uvicorn
--   build first endpoint
-
+```
+POST /events
+GET /metrics/events-per-hour
 GET /health
+```
 
-------------------------------------------------------------------------
+Example:
 
-## Week 6 --- Event API
+```bash
+curl -X POST http://localhost:8000/events
+```
 
-Deliverables:
+---
 
-API endpoints:
+### Analytics Queries
 
-POST /events\
-GET /events
+The system supports time-based aggregation queries such as:
 
-Tasks:
+* events per hour
+* events per type
+* activity over time
 
--   integrate PostgreSQL connection
--   insert events via API
--   query events
+Example query:
 
-------------------------------------------------------------------------
+```sql
+SELECT date_trunc('hour', occurred_at), count(*)
+FROM events
+GROUP BY 1
+ORDER BY 1;
+```
 
-## Week 7 --- Metrics Queries
+---
 
-Deliverables:
+# Database Schema
 
-analytics queries
+```
+events
+```
 
-Examples:
+| column      | type        |
+| ----------- | ----------- |
+| event_id    | BIGSERIAL   |
+| user_id     | UUID        |
+| event_type  | TEXT        |
+| properties  | JSONB       |
+| occurred_at | TIMESTAMPTZ |
 
--   events per hour
--   active users per day
--   purchases per day
+Indexes implemented:
 
-------------------------------------------------------------------------
+```
+(event_type, occurred_at)
+GIN index on JSONB properties
+```
 
-## Week 8 --- Aggregated Tables
+These indexes support efficient filtering and analytics queries.
 
-Deliverables:
+---
 
-metrics table or materialized view
+# Performance Analysis
 
-Tasks:
+Example analytics query tested with `EXPLAIN ANALYZE`.
 
--   create daily metrics table
--   write aggregation SQL
--   refresh metrics script
+Dataset size: ~100k rows.
 
-------------------------------------------------------------------------
+Performance improvements were observed after adding indexes on time-based columns.
 
-## Week 9 --- Query Optimization
+Performance analysis documentation is located in:
 
-Deliverables:
+```
+/perf/query_analysis.md
+```
 
-performance report
+---
 
-Tasks:
+# Project Structure
 
--   analyze slow queries
--   add indexes
--   compare EXPLAIN output
+```
+postgres-event-analytics
 
-------------------------------------------------------------------------
+app/
+  api/
+    events.py
+  db.py
+  main.py
+  models.py
 
-## Week 10 --- Nginx Deployment
+scripts/
+  generate_events.py
 
-Deliverables:
+sql/
+  schema.sql
 
-FastAPI running behind nginx
+docs/
+  architecture.md
 
-Tasks:
+perf/
+  query_analysis.md
+```
 
--   install nginx
--   configure reverse proxy
--   expose API endpoint
+---
 
-------------------------------------------------------------------------
+# Running the Project
 
-## Week 11 --- Documentation
+Start the API server:
 
-Deliverables:
+```
+uvicorn app.main:app --reload
+```
 
--   architecture diagram
--   performance tuning notes
--   API documentation
+Generate synthetic events:
 
-------------------------------------------------------------------------
+```
+python scripts/generate_events.py
+```
 
-## Week 12 --- Portfolio Polish
+Test the API:
 
-Deliverables:
+```
+curl http://localhost:8000/health
+```
 
--   clean repository
--   recruiter‑friendly README
--   demo recording
+---
 
-------------------------------------------------------------------------
+# Skills Demonstrated
 
-# Project Folder Structure
+This project highlights practical engineering skills:
 
-project-root
+* PostgreSQL schema design
+* indexing strategies
+* query performance analysis
+* Python API development
+* Linux-based backend development
+* system architecture documentation
 
-app/ api.py db.py models.py
+---
 
-scripts/ generate_events.py
+# Future Improvements
 
-sql/ schema.sql queries.sql
+Planned upgrades:
 
-docs/ architecture.md performance.md
+* table partitioning for large event datasets
+* connection pooling
+* background aggregation jobs
+* query caching
+* monitoring dashboards
 
-README.md
-
-------------------------------------------------------------------------
-
-# How Recruiters Should Evaluate This Project
-
-This repository demonstrates:
-
--   relational data modeling
--   PostgreSQL performance tuning
--   backend API design
--   Linux deployment skills
--   production-style documentation
-
-------------------------------------------------------------------------
-
-# Next Improvements (Future Work)
-
--   table partitioning
--   connection pooling
--   async database queries
--   monitoring dashboards
--   load testing
