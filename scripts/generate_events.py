@@ -46,4 +46,4 @@ def main(batch_size=1000, total=10000):
     conn.close()
 
 if __name__ == "__main__":
-    main(batch_size=2000, total=200000)
+    main(batch_size=2000, total=500000)
