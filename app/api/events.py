@@ -12,6 +12,10 @@ class EventIn(BaseModel):
     properties: dict
     occurred_at: datetime | None = None
 
+@router.get("/events/")
+async def read_events():
+    return [{"event_id": "1"}, {"event_id": "2"}]
+
 @router.post("/events")
 def create_event(payload: EventIn):
     conn = get_conn()
@@ -75,3 +79,21 @@ def events_by_type():
         {"event_type": r[0], "count": r[1]}
         for r in rows
     ]
+
+@router.get("/metrics/events-last-24h")
+def events_last_24h():
+    conn = get_conn()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT count(*)
+        FROM events
+        WHERE occurred_at > now() - interval '24 hours'
+    """)
+
+    count = cur.fetchone()[0]
+
+    cur.close()
+    conn.close()
+
+    return {"events_last_24h": count}

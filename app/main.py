@@ -1,10 +1,14 @@
+#import sys
+#import os
+#print("Python Executable:", sys.executable)
+#print("Current Working Directory:", os.getcwd())
+#print("Python Path:", sys.path)
 from fastapi import FastAPI
-#from app.api import events
-from app.api.events import router as events_router
+from app.api import events
+
 
 app = FastAPI(title="Event Analytics API")
-#app.include_router(events.router,prefix="/events")
-app.include_router(events_router)
+app.include_router(events.router)
 @app.get("/health")
 def health():
     return {"status": "ok"}
