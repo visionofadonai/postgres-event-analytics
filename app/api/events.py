@@ -32,7 +32,7 @@ def create_event(payload: EventIn):
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         cur.close()
-        conn.close()
+        release_conn()
     return {"status": "ok"}
 
 @router.get("/metrics/events-per-hour")
@@ -51,7 +51,7 @@ def events_per_hour():
     rows = cur.fetchall()
 
     cur.close()
-    conn.close()
+    release_conn(conn)
 
     return [
         {"hour": str(r[0]), "count": r[1]}
@@ -73,7 +73,7 @@ def events_by_type():
     rows = cur.fetchall()
 
     cur.close()
-    conn.close()
+    release_conn(conn)
 
     return [
         {"event_type": r[0], "count": r[1]}
@@ -94,6 +94,6 @@ def events_last_24h():
     count = cur.fetchone()[0]
 
     cur.close()
-    conn.close()
+    release_conn(conn)
 
     return {"events_last_24h": count}
