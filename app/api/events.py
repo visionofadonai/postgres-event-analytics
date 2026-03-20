@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from datetime import datetime
-from app.db import get_conn
+from app.db import get_conn, release_conn
 from psycopg2.extras import Json
 
 router = APIRouter()
@@ -32,7 +32,7 @@ def create_event(payload: EventIn):
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         cur.close()
-        release_conn()
+        release_conn(conn)
     return {"status": "ok"}
 
 @router.get("/metrics/events-per-hour")

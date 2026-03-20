@@ -1,11 +1,10 @@
 import os
-# import psycopg2 
-# from dotenv import load_dotenv
-from psycopyg2 import pool
+from psycopg2 import pool
+from dotenv import load_dotenv
 
-# load_dotenv()
+load_dotenv()
 
-connection_pool = pool.simpleConnectionPool(
+connection_pool = pool.SimpleConnectionPool(
     1, 10,
     dbname = os.getenv("DB_NAME", "event_analytics"),
     user = os.getenv("DB_USER", "postgres"),
