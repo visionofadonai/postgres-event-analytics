@@ -80,3 +80,16 @@ def events_last_24h():
         release_conn(conn)
 
     return {"events_last_24h": count}
+
+@router.get("/metrics/events-range")
+def events_range(hours: int = 24):
+    conn = get_conn()
+    cur = conn.cursor()
+
+    try:
+        count = fetch_events_range(cur,hours)
+    finally:
+        cur.close()
+        release_conn(conn)
+
+    return {"count": count}

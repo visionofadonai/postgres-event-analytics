@@ -24,3 +24,13 @@ def fetch_events_last_24h(cur):
         WHERE occurred_at > now() - interval '24 hours'
     """)
     return cur.fetchone()[0]
+
+def fetch_events_range(cur, hours):
+    cur.execute("""
+        SELECT count(*)
+        FROM events
+        WHERE occurred_at > now() - make_interval(hours => %s)
+    """, (hours,))
+
+
+    return cur.fetchone()[0]
