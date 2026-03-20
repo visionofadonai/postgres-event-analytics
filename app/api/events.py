@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from datetime import datetime
 from app.db import get_conn, release_conn
 from psycopg2.extras import Json
+from app.queries import *
 
 router = APIRouter()
 
@@ -40,18 +41,11 @@ def events_per_hour():
     conn = get_conn()
     cur = conn.cursor()
 
-    cur.execute("""
-        SELECT date_trunc('hour', occurred_at) AS hour,
-               count(*)
-        FROM events
-        GROUP BY hour
-        ORDER BY hour;
-    """)
-
-    rows = cur.fetchall()
-
-    cur.close()
-    release_conn(conn)
+    try:
+        rows = fetch_events_per_hour(cur)
+    finally:
+        cur.close()
+        release_conn(conn)
 
     return [
         {"hour": str(r[0]), "count": r[1]}
@@ -62,18 +56,12 @@ def events_per_hour():
 def events_by_type():
     conn = get_conn()
     cur = conn.cursor()
-
-    cur.execute("""
-        SELECT event_type, count(*)
-        FROM events
-        GROUP BY event_type
-        ORDER BY count DESC;
-    """)
-
-    rows = cur.fetchall()
-
-    cur.close()
-    release_conn(conn)
+    
+    try:
+        rows = fetch_events_by_type(cur)
+    finally:
+        cur.close()
+        release_conn(conn)
 
     return [
         {"event_type": r[0], "count": r[1]}
@@ -85,15 +73,10 @@ def events_last_24h():
     conn = get_conn()
     cur = conn.cursor()
 
-    cur.execute("""
-        SELECT count(*)
-        FROM events
-        WHERE occurred_at > now() - interval '24 hours'
-    """)
-
-    count = cur.fetchone()[0]
-
-    cur.close()
-    release_conn(conn)
+    try:
+        count = fetch_events_last_24h(cur)
+    finally:
+        cur.close()
+        release_conn(conn)
 
     return {"events_last_24h": count}
