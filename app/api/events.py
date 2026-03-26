@@ -108,4 +108,4 @@ def hourly_metrics():
     return [
             {"hour": r[0], "count": r[1]}
             for r in rows
-    ]
+    ] 
