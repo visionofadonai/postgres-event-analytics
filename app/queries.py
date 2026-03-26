@@ -34,3 +34,11 @@ def fetch_events_range(cur, hours):
 
 
     return cur.fetchone()[0]
+
+def get_hourly_metrics(cur):
+    cur.execute("""
+        SELECT hour, event_count
+        FROM events_hourly
+        ORDER BY hour;
+    """)
+    return cur.fetchall()

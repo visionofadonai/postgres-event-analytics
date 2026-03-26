@@ -93,3 +93,19 @@ def events_range(hours: int = 24):
         release_conn(conn)
 
     return {"count": count}
+
+@router.get("/metrics/hourly-metrics")
+def hourly_metrics():
+    conn = get_conn()
+    cur = conn.cursor()
+
+    try: 
+        rows = get_hourly_metrics(cur)
+    finally:
+        cur.close()
+        release_conn(conn)
+
+    return [
+            {"hour": r[0], "count": r[1]}
+            for r in rows
+    ]
