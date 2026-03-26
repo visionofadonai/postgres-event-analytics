@@ -40,5 +40,5 @@ def get_hourly_metrics(cur):
         SELECT hour, event_count
         FROM events_hourly
         ORDER BY hour;
-    """)
+    """) 
     return cur.fetchall()
