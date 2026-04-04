@@ -50,7 +50,7 @@ async def events_per_hour():
             ORDER BY hour;
         """)
     finally:
-        release_conn(conn)
+        await release_conn(conn)
 
     return [
         {"hour": str(r[0]), "count": r[1]}
