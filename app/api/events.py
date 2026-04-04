@@ -4,6 +4,7 @@ from datetime import datetime
 from app.db import get_conn, release_conn
 from psycopg2.extras import Json
 from app.queries import *
+from app.async_db import get_conn, release_conn
 
 router = APIRouter()
 
@@ -37,14 +38,14 @@ def create_event(payload: EventIn):
     return {"status": "ok"}
 
 @router.get("/metrics/events-per-hour")
-def events_per_hour():
-    conn = get_conn()
-    cur = conn.cursor()
+async def events_per_hour():
+    conn = await get_conn()
+    # cur = conn.cursor()
 
     try:
-        rows = fetch_events_per_hour(cur)
+        rows = fetch_events_per_hour(conn)
     finally:
-        cur.close()
+        # cur.close()
         release_conn(conn)
 
     return [
