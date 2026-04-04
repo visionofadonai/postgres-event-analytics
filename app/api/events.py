@@ -40,12 +40,16 @@ def create_event(payload: EventIn):
 @router.get("/metrics/events-per-hour")
 async def events_per_hour():
     conn = await get_conn()
-    # cur = conn.cursor()
 
     try:
-        rows = fetch_events_per_hour(conn)
+        rows = await conn.fetch("""
+            SELECT date_trunc('hour', occurred_at) AS hour,
+                   count(*)
+            FROM events
+            GROUP BY hour
+            ORDER BY hour;
+        """)
     finally:
-        # cur.close()
         release_conn(conn)
 
     return [

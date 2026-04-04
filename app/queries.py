@@ -1,12 +1,11 @@
 def fetch_events_per_hour(conn):
-    #cur.execute("""
-    return await conn.fetch("""
+    cur.execute("""
         SELECT date_trunc('hour', occurred_at), count(*)
         FROM events
         GROUP BY 1
         ORDER BY 1;
     """)
-    #return cur.fetchall()
+    return cur.fetchall()
 
 
 def fetch_events_by_type(cur):
