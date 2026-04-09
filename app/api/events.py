@@ -5,50 +5,38 @@ from app.db import get_conn, release_conn
 from psycopg2.extras import Json
 from app.queries import *
 from app.async_db import get_conn, release_conn
+from app.schemas.event_schema import *
 
 router = APIRouter()
-
-class EventIn(BaseModel):
-    user_id: str
-    event_type: str
-    properties: dict
-    occurred_at: datetime | None = None
 
 @router.get("/events/")
 async def read_events():
     return [{"event_id": "1"}, {"event_id": "2"}]
 
+
 @router.post("/events")
-def create_event(payload: EventIn):
-    conn = get_conn()
-    cur = conn.cursor()
+async def create_event(payload: EventIn):
+    conn = await get_conn()
     occurred_at = payload.occurred_at or datetime.utcnow()
+    
     try:
-        cur.execute(
+        await cur.execute(
             "INSERT INTO events (user_id, event_type, properties, occurred_at) VALUES (%s,%s,%s,%s)",
             (payload.user_id, payload.event_type, Json(payload.properties), occurred_at)
         )
-        conn.commit()
+        await conn.commit()
     except Exception as e:
-        conn.rollback()
+        await conn.rollback()
         raise HTTPException(status_code=500, detail=str(e))
     finally:
-        cur.close()
-        release_conn(conn)
+        await release_conn(conn)
     return {"status": "ok"}
 
 @router.get("/metrics/events-per-hour")
 async def events_per_hour():
     conn = await get_conn()
-
     try:
-        rows = await conn.fetch("""
-            SELECT date_trunc('hour', occurred_at) AS hour,
-                   count(*)
-            FROM events
-            GROUP BY hour
-            ORDER BY hour;
-        """)
+        rows = await fetch_events_per_hour(conn)
     finally:
         await release_conn(conn)
 
@@ -58,15 +46,13 @@ async def events_per_hour():
     ]
 
 @router.get("/metrics/events-by-type")
-def events_by_type():
-    conn = get_conn()
-    cur = conn.cursor()
+async def events_by_type():
+    conn = await get_conn()
     
     try:
-        rows = fetch_events_by_type(cur)
+        rows = await fetch_events_by_type(conn)
     finally:
-        cur.close()
-        release_conn(conn)
+        await release_conn(conn)
 
     return [
         {"event_type": r[0], "count": r[1]}
@@ -74,40 +60,35 @@ def events_by_type():
     ]
 
 @router.get("/metrics/events-last-24h")
-def events_last_24h():
-    conn = get_conn()
-    cur = conn.cursor()
+async def events_last_24h():
+    conn = await get_conn()
 
     try:
-        count = fetch_events_last_24h(cur)
+        count = await fetch_events_last_24h(conn)
     finally:
-        cur.close()
-        release_conn(conn)
+        await release_conn(conn)
 
     return {"events_last_24h": count}
 
 @router.get("/metrics/events-range")
-def events_range(hours: int = 24):
-    conn = get_conn()
-    cur = conn.cursor()
+async def events_range(hours: int = 24):
+    conn = await get_conn()
 
     try:
-        count = fetch_events_range(cur,hours)
+        count = await fetch_events_range(conn,hours)
     finally:
-        cur.close()
-        release_conn(conn)
+        await release_conn(conn)
 
     return {"count": count}
 
 @router.get("/metrics/hourly-metrics")
-def hourly_metrics():
-    conn = get_conn()
-    cur = conn.cursor()
+async def hourly_metrics():
+    conn = await get_conn()
 
     try: 
-        rows = get_hourly_metrics(cur)
+        rows = await fetch_events_per_hour(conn)
+
     finally:
-        cur.close()
         release_conn(conn)
 
     return [
