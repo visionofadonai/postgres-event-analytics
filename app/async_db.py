@@ -17,6 +17,12 @@ async def init_db():
         max_size=10
     )
 
+async def close_db():
+    global pool
+    if pool is not None:
+        await pool.close()
+        pool = None
+
 async def get_conn():
     return await pool.acquire()
 
