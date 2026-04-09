@@ -212,9 +212,7 @@ This project highlights practical engineering skills:
 
 ---
 
-# Future Improvements
-
-Planned upgrades:
+# Performance Upgrades:
 
 * table partitioning for large event datasets
 * connection pooling
@@ -222,3 +220,22 @@ Planned upgrades:
 * query caching
 * monitoring dashboards
 
+---
+
+## Application Architecture
+
+The application is organized into separate layers:
+
+- API layer: FastAPI routes
+- Service layer: business logic
+- Repository layer: SQL and database access
+- Schema layer: request and response models
+
+## Async Database Access
+
+The service uses asyncpg connection pooling for improved concurrency and more realistic backend behavior.
+
+## Running Tests
+
+```bash
+pytest
