@@ -1,21 +1,19 @@
 import asyncpg
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
+from app.config import DB_NAME, DB_USER, DB_PASS, DB_HOST
 
 pool = None
 
 async def init_db():
     global pool
-    pool = await asyncpg.create_pool(
-        database=os.getenv("DB_NAME", "event_analytics"),
-        user=os.getenv("DB_USER", "postgres"),
-        password=os.getenv("DB_PASS", ""),
-        host=os.getenv("DB_HOST", "localhost"),
-        min_size=1,
-        max_size=10
-    )
+    if pool is None:
+        pool = await asyncpg.create_pool(
+            database=DB_NAME,
+            user=DB_USER,
+            password=DB_PASS,
+            host=DB_HOST,
+            min_size=1,
+            max_size=10
+        )
 
 async def close_db():
     global pool
