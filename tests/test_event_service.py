@@ -18,6 +18,7 @@ async def test_events_by_type_service(monkeypatch):
     )
 
     result = await events_by_type_service(FakeConn())
+    
     assert result == [
         {"event_type": "page_view", "count": 10},
         {"event_type": "click", "count": 5},
