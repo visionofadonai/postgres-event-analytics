@@ -1,8 +1,10 @@
+import json
+
 async def insert_event(conn, user_id, event_type, properties, occurred_at):
     await conn.execute("""
         INSERT INTO events (user_id, event_type, properties, occurred_at)
         VALUES ($1, $2, $3, $4)
-    """, user_id, event_type, properties, occurred_at)
+    """, user_id, event_type, json.dumps(properties), occurred_at)
 
 async def fetch_events_per_hour(conn):
     return await conn.fetch("""
