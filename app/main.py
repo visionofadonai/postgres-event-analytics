@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from app.api import events
 from app.async_db import init_db, close_db
 from app.config import APP_TITLE, LOG_LEVEL
+from app.middleware import log_requests
 
 logging.basicConfig(
     level=logging.INFO,
@@ -12,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(title=APP_TITLE)
 app.include_router(events.router)
+app.middleware("http")(log_requests)
 
 @app.on_event("startup")
 async def startup():
