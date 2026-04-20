@@ -15,22 +15,30 @@ router = APIRouter()
 
 @router.post("/events")
 async def create_event(payload: EventIn):
-    logger.info("Received event insert request for event_type=%s", payload.event_type)
+    logger.info(
+        "create_event_request", 
+        extra = {"event_type":payload.event_type}
+    )
     conn = await get_conn()
     try:
         return await create_event_service(conn, payload)
     except Exception as e:
-        logger.exception("Failed to create event")
+        logger.exception("create_event_failed")
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         await release_conn(conn)
 
 @router.get("/metrics/events-per-hour")
 async def events_per_hour():
+    logger.info(
+        "events_per_hour_request",
+        extra = {"event_type":payload.event_type}
+    )
     conn = await get_conn()
     try:
         return await events_per_hour_service(conn)
     except Exception as e:
+        logger.exception("events_per_hour_failed")
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         await release_conn(conn)
