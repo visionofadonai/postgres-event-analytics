@@ -14,12 +14,29 @@ async def create_event_service(conn, payload):
 
 async def events_per_hour_service(conn):
     rows = await fetch_events_per_hour(conn)
-    return [{"hour": str(r["hour"]), "count": r["count"]} for r in rows]
+    return {
+        "status": "success",
+        "data": [
+            {"hour": str(r["hour"]), "count": r["count"]} 
+            for r in rows
+        ]
+    }
 
 async def events_by_type_service(conn):
     rows = await fetch_events_by_type(conn)
-    return [{"event_type": r["event_type"], "count": r["count"]} for r in rows]
+    return {
+        "status": "success",
+        "data": [
+            {"event_type": r["event_type"], "count": r["count"]} 
+            for r in rows
+        ]
+    }
 
 async def events_last_24h_service(conn):
     row = await fetch_events_last_24h(conn)
-    return {"events_last_24h": row["events_last_24h"]}
+    return {
+        "status": "success",
+        "data": [
+            {"events_last_24h": row["events_last_24h"]}
+        ] 
+    }
