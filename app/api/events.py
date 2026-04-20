@@ -32,7 +32,6 @@ async def create_event(payload: EventIn):
 async def events_per_hour():
     logger.info(
         "events_per_hour_request",
-        extra = {"event_type":payload.event_type}
     )
     conn = await get_conn()
     try:
