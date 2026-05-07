@@ -4,6 +4,7 @@ from app.api import events
 from app.async_db import init_db, close_db
 from app.config import APP_TITLE, LOG_LEVEL
 from app.middleware import log_requests
+from fastapi.middleware.cors import CORSMiddleware
 
 logging.basicConfig(
     level=logging.INFO,
@@ -20,6 +21,13 @@ app = FastAPI(
 )
 app.include_router(events.router)
 app.middleware("http")(log_requests)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # tighten later if needed
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 async def startup():
