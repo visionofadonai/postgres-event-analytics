@@ -1,5 +1,6 @@
 import logging
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
+from app.main import limiter
 from app.async_db import get_conn, release_conn
 from app.schemas.event_schema import EventIn
 from app.services.event_service import (
@@ -14,7 +15,8 @@ logger = logging.getLogger(__name__)
 router = APIRouter(tags=["events"])
 
 @router.post("/events")
-async def create_event(payload: EventIn):
+@limiter.limit("10/minute")
+async def create_event(request: Request, payload: EventIn):
     logger.info(
         "create_event_request", 
         extra = {"event_type":payload.event_type}
