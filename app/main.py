@@ -11,7 +11,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title=APP_TITLE)
+app = FastAPI(
+    title="PostgreSQL Event Analytics Service",
+    description="Backend analytics service build with FastAPI and PostgreSQL",
+    version="1.0.0",
+    docs_uri="/docs",
+    redoc_url="/redoc",
+)
 app.include_router(events.router)
 app.middleware("http")(log_requests)
 

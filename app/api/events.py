@@ -11,7 +11,7 @@ from app.services.event_service import (
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter()
+router = APIRouter(tags=["events"])
 
 @router.post("/events")
 async def create_event(payload: EventIn):
