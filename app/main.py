@@ -1,7 +1,7 @@
 import logging
 from fastapi import FastAPI
 from app.api import events
-from app.async_db import init_db, close_db
+from app.async_db import init_db, close_db, get_conn, release_conn
 from app.config import APP_TITLE, LOG_LEVEL
 from app.middleware import log_requests
 from fastapi.middleware.cors import CORSMiddleware
@@ -50,6 +50,15 @@ async def shutdown():
     await close_db()
 
 @app.get("/health")
-def health():
-    return {"status": "ok"}
+async def health():
+    conn = await get_conn()
 
+    try:
+        await conn.fetch("SELECT 1")
+    finally:
+        await release_conn(conn)
+
+    return {
+        "status": "ok",
+        "database": "reachable"
+    }
