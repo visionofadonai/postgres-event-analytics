@@ -1,23 +1,22 @@
 import logging
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from app.api import events
 from app.async_db import init_db, close_db, get_conn, release_conn
 from app.config import APP_TITLE, LOG_LEVEL
 from app.middleware import log_requests
 from fastapi.middleware.cors import CORSMiddleware
-from slowapi import Limiter
+from slowapi import _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi.extension import _rate_limit_exceeded_handler
+from .limiter import limiter
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(name)s | %(message)s"
 )
 logger = logging.getLogger(__name__)
-
-limiter = Limiter(key_func=get_remote_address)
 
 app = FastAPI(
     title="PostgreSQL Event Analytics Service",
@@ -62,3 +61,8 @@ async def health():
         "status": "ok",
         "database": "reachable"
     }
+
+@app.get("/test")
+@limiter.limit("10/minute")
+async def test_route(request: Request):
+    return {"message": "Success"}
