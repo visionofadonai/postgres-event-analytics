@@ -1,5 +1,26 @@
 # PostgreSQL Event Analytics Service
 
+Production-style backend analytics system built with:
+
+- PostgreSQL
+- FastAPI
+- asyncpg
+- Nginx
+- Ubuntu Server
+
+Features explored include:
+- time-series partitioning
+- async backend architecture
+- aggregation pipelines
+- query optimization
+- structured logging
+- deployment automation
+
+Tested with approximately:
+- 1,000,000 events
+
+# PostgreSQL Event Analytics Service
+
 A backend project that simulates a production-style **event analytics pipeline** using PostgreSQL, FastAPI, and Python.
 
 This project is designed to demonstrate practical backend and database engineering skills through a system that ingests events, stores them efficiently, exposes analytics endpoints, and explores performance tuning at scale.
