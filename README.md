@@ -76,6 +76,7 @@ PostgreSQL Database
         │
         ▼
 Analytics Endpoints
+```
 
 ## Screenshots
 
