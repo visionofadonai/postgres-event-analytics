@@ -1,0 +1,5 @@
+- Built a PostgreSQL/FastAPI backend analytics service handling ~1M partitioned events
+- Implemented async database access with asyncpg and connection pooling
+- Designed time-series partitioning and aggregation strategies for analytics workloads
+- Deployed backend service using Nginx and systemd on Ubuntu Server
+- Improved query performance using indexing strategies and EXPLAIN ANALYZE
