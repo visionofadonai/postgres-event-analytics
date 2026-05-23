@@ -1,72 +1,84 @@
-# PostgreSQL Event Analytics Service
+# TicketFlow Backend Service
 
-Production-style backend analytics system built with:
+Production-style backend service for ticket lifecycle management and operational analytics built with:
 
-- PostgreSQL
-- FastAPI
-- asyncpg
-- Nginx
-- Ubuntu Server
+* PostgreSQL
+* FastAPI
+* asyncpg
+* Nginx
+* Ubuntu Server
 
-Features explored include:
-- time-series partitioning
-- async backend architecture
-- aggregation pipelines
-- query optimization
-- structured logging
-- deployment automation
+The project explores:
+
+* async backend architecture
+* PostgreSQL optimization
+* time-series partitioning
+* aggregation pipelines
+* structured logging
+* deployment and observability
+* ticket workflow analytics
 
 Tested with approximately:
-- 1,000,000 ticket lifecycle events
 
-# PostgreSQL Event Analytics Service
-
-A backend project that simulates a production-style **ticket lifecycle event analytics pipeline** using PostgreSQL, FastAPI, and Python.
-
-This project is designed to demonstrate practical backend and database engineering skills through a system that ingests ticket lifecycle events, stores them efficiently, exposes analytics endpoints, and explores performance tuning at scale.
+* **1,000,000 ticket lifecycle events**
 
 ---
 
-## Project Overview
+# Project Overview
 
-Modern applications generate large volumes of user activity data such as:
+TicketFlow is a backend-focused project designed to simulate a production-style ticket and workflow management platform.
 
-- page views
-- clicks
-- signups
-- purchases
+The system tracks ticket lifecycle activity such as:
 
-This project simulates a simplified ticket lifecycle event tracking platform and focuses on how that data is:
+* ticket creation
+* assignment changes
+* status transitions
+* priority updates
+* resolution events
 
-- ingested
-- stored
-- partitioned
-- queried
-- aggregated
-- exposed through a backend API
+The project focuses on how backend systems ingest, store, query, aggregate, and expose operational workflow data at scale.
 
-Building on top of a well tested analytics platform, this project adds:
+Core engineering areas explored include:
 
-- support to workflow metrics
-- operational reporting 
-- support ticket lifecycle events
-
----
-
-## Current Scale
-
-This project has been tested with approximately:
-
-- **1,000,000 ticket lifecycle events**
-
-This larger dataset makes query planning, indexing, partitioning, and aggregation more meaningful.
+* PostgreSQL schema design
+* query optimization using `EXPLAIN ANALYZE`
+* async API development with FastAPI
+* time-series partitioning strategies
+* aggregation pipelines
+* connection pooling
+* deployment using Nginx and systemd
+* structured logging and observability
 
 ---
 
-## Architecture
+# Current Scale
+
+The system has been tested with approximately:
+
+* **1,000,000 ticket lifecycle events**
+
+This larger dataset makes indexing, partitioning, aggregation, and query optimization behavior more realistic and meaningful.
+
+---
+
+# Roadmap
+
+Planned future improvements include:
+
+* ticket assignment workflows
+* SLA tracking
+* comment threads
+* audit history
+* role-based permissions
+* notification system
+* dashboard frontend
+
+---
+
+# Architecture
 
 ```text
-Event Generator Script
+Users / Support Staff
         │
         ▼
 FastAPI Backend API
@@ -74,13 +86,27 @@ FastAPI Backend API
         ▼
 PostgreSQL Database
         │
-        ├── Raw Event Storage
-        ├── Time-Based Partitioning
-        └── Aggregated Metrics Tables
+        ├── Ticket Lifecycle Events
+        ├── Time-Based Partitions
+        └── Aggregated Workflow Metrics
         │
         ▼
-Analytics Endpoints
+Analytics and Reporting Endpoints
 ```
+
+---
+
+# Screenshots
+
+## API Documentation
+
+![Swagger Docs](screenshots/swagger.png)
+
+## Query Analysis
+
+![Explain Analyze](screenshots/explain.png)
+
+---
 
 ## Screenshots
 
