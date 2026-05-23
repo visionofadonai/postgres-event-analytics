@@ -17,13 +17,13 @@ Features explored include:
 - deployment automation
 
 Tested with approximately:
-- 1,000,000 events
+- 1,000,000 ticket lifecycle events
 
 # PostgreSQL Event Analytics Service
 
-A backend project that simulates a production-style **event analytics pipeline** using PostgreSQL, FastAPI, and Python.
+A backend project that simulates a production-style **ticket lifecycle event analytics pipeline** using PostgreSQL, FastAPI, and Python.
 
-This project is designed to demonstrate practical backend and database engineering skills through a system that ingests events, stores them efficiently, exposes analytics endpoints, and explores performance tuning at scale.
+This project is designed to demonstrate practical backend and database engineering skills through a system that ingests ticket lifecycle events, stores them efficiently, exposes analytics endpoints, and explores performance tuning at scale.
 
 ---
 
@@ -36,7 +36,7 @@ Modern applications generate large volumes of user activity data such as:
 - signups
 - purchases
 
-This project simulates a simplified event tracking platform and focuses on how that data is:
+This project simulates a simplified ticket lifecycle event tracking platform and focuses on how that data is:
 
 - ingested
 - stored
@@ -45,7 +45,11 @@ This project simulates a simplified event tracking platform and focuses on how t
 - aggregated
 - exposed through a backend API
 
-The goal is to build something closer to a real engineering system than a tutorial project.
+Building on top of a well tested analytics platform, this project adds:
+
+- support to workflow metrics
+- operational reporting 
+- support ticket lifecycle events
 
 ---
 
@@ -53,7 +57,7 @@ The goal is to build something closer to a real engineering system than a tutori
 
 This project has been tested with approximately:
 
-- **1,000,000 events**
+- **1,000,000 ticket lifecycle events**
 
 This larger dataset makes query planning, indexing, partitioning, and aggregation more meaningful.
 
