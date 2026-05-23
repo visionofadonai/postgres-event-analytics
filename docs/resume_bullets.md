@@ -1,5 +1,6 @@
-- Built a PostgreSQL/FastAPI backend analytics service handling ~1M partitioned events
+- Built a production-style ticket management backend service using FastAPI and PostgreSQL
+- Designed PostgreSQL schemas and indexing strategies for workflow and analytics queries
 - Implemented async database access with asyncpg and connection pooling
-- Designed time-series partitioning and aggregation strategies for analytics workloads
-- Deployed backend service using Nginx and systemd on Ubuntu Server
-- Improved query performance using indexing strategies and EXPLAIN ANALYZE
+- Developed operational analytics endpoints for ticket lifecycle metrics
+- Deployed backend services using Nginx and systemd on Ubuntu Server
+- Explored query optimization and performance analysis using EXPLAIN ANALYZE
