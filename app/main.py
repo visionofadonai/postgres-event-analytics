@@ -1,6 +1,6 @@
 import logging
 from fastapi import FastAPI, Request
-from app.api import events
+from app.api import events, tickets
 from app.async_db import init_db, close_db, get_conn, release_conn
 from app.config import APP_TITLE, LOG_LEVEL
 from app.middleware import log_requests
@@ -11,6 +11,7 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi.extension import _rate_limit_exceeded_handler
 from .limiter import limiter
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -25,6 +26,10 @@ app = FastAPI(
     docs_uri="/docs",
     redoc_url="/redoc",
 )
+
+app.include_router(tickets.router)
+
+
 app.include_router(events.router)
 app.middleware("http")(log_requests)
 app.add_middleware(
