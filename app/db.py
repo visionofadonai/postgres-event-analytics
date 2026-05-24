@@ -6,10 +6,10 @@ load_dotenv()
 
 connection_pool = pool.SimpleConnectionPool(
     1, 10,
-    dbname = os.getenv("DB_NAME", "event_analytics"),
-    user = os.getenv("DB_USER", "postgres"),
-    password = os.getenv("DB_PASS", "strongpassword"),
-    host = os.getenv("DB_HOST", "localhost")
+    dbname = os.getenv("DB_NAME"),
+    user = os.getenv("DB_USER"),
+    password = os.getenv("DB_PASS"),
+    host = os.getenv("DB_HOST")
 )
 
 def get_conn():

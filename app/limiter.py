@@ -1,4 +1,5 @@
 from slowapi import Limiter
+from slowapi.util import get_remote_address
 from fastapi import Request
 
 def get_real_ip(request: Request):
@@ -8,4 +9,7 @@ def get_real_ip(request: Request):
     return request.client.host
 
 # Create the instance here
-limiter = Limiter(key_func=get_real_ip)
+
+# Use for testing
+# limiter = Limiter(key_func=get_real_ip)
+limiter = Limiter(key_func=get_remote_address)

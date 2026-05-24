@@ -23,7 +23,7 @@ app = FastAPI(
     title="PostgreSQL Event Analytics Service",
     description="Backend analytics service build with FastAPI and PostgreSQL",
     version="1.0.0",
-    docs_uri="/docs",
+    docs_url="/docs",
     redoc_url="/redoc",
 )
 
@@ -34,10 +34,10 @@ app.include_router(events.router)
 app.middleware("http")(log_requests)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # tighten later if needed
+    allow_origins=["https://llp"], 
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)

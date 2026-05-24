@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any
+from typing import Any, List
 from pydantic import BaseModel
 
 class EventIn(BaseModel):
@@ -18,6 +18,10 @@ class EventPerHourOut(BaseModel):
 class EventByTypeOut(BaseModel):
     event_type: str
     count: int
+
+class EventByTypeEnvelope(BaseModel):
+    status: str
+    data: list[EventByTypeOut]
 
 class EventLast24hOut(BaseModel):
     events_last_24h: int

@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS events
 (
-    event_id bigint NOT NULL,
+    event_id bigint NOT NULL DEFAULT nextval('events_event_id_seq'::regclass),
     user_id uuid NOT NULL,
     event_type text COLLATE pg_catalog."default" NOT NULL,
     properties jsonb,

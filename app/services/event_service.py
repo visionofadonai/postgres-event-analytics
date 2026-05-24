@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from app.repositories.event_repository import *
+from app.repositories.event_repository import insert_event, fetch_events_per_hour, fetch_events_per_hour, fetch_events_per_hour,  fetch_events_per_hour, fetch_events_per_hour, fetch_events_by_type 
 
 async def create_event_service(conn, payload):
     occurred_at = payload.occurred_at or datetime.now(timezone.utc)
@@ -27,7 +27,7 @@ async def events_by_type_service(conn):
     return {
         "status": "success",
         "data": [
-            {"event_type": r["event_type"], "count": r["count"]} 
+            {"event_type": str(r["event_type"]), "count": r["count"]} 
             for r in rows
         ]
     }
