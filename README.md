@@ -22,6 +22,17 @@ Tested with approximately:
 
 * **1,000,000 ticket lifecycle events**
 
+## Engineering Practices
+
+This project includes:
+
+- database migrations (Alembic)
+- automated testing
+- GitHub Actions CI
+- structured logging
+- API versioning strategy
+- deployment automation
+
 ---
 
 # Project Overview
