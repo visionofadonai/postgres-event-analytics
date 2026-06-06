@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from app.repositories.event_repository import insert_event, fetch_events_per_hour, fetch_events_per_hour, fetch_events_per_hour,  fetch_events_per_hour, fetch_events_per_hour, fetch_events_by_type 
+from app.repositories.event_repository import insert_event, fetch_events_per_hour, fetch_events_by_type, fetch_events_last_24h 
 
 async def create_event_service(conn, payload):
     occurred_at = payload.occurred_at or datetime.now(timezone.utc)

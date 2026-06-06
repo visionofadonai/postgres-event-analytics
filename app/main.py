@@ -25,6 +25,7 @@ app = FastAPI(
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
+    prefix="/api/v1"
 )
 
 app.include_router(tickets.router)
@@ -34,7 +35,7 @@ app.include_router(events.router)
 app.middleware("http")(log_requests)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://llp"], 
+    allow_origins=["https://llp"], #Update to production domain upon release 
     allow_credentials=True,
     allow_methods=["GET", "POST"],
     allow_headers=["Authorization", "Content-Type"],

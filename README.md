@@ -117,14 +117,3 @@ Analytics and Reporting Endpoints
 
 ![Explain Analyze](screenshots/explain.png)
 
----
-
-## Screenshots
-
-### API Documentation
-
-![Swagger Docs](screenshots/swagger.png)
-
-### Query Analysis
-
-![Explain Analyze](screenshots/explain.png)
