@@ -1,3 +1,34 @@
+## What This Project Demonstrates
+
+### Backend Engineering
+
+- FastAPI
+- Async programming
+- API design
+
+### Database Engineering
+
+- PostgreSQL
+- Partitioning
+- Query optimization
+- Indexing
+
+### Operations
+
+- Nginx
+- systemd
+- Logging
+- Observability
+
+### Engineering Practices
+
+- CI/CD
+- Testing
+- Migrations
+- Architecture documentation
+
+---
+
 # TicketFlow Backend Service
 
 Production-style backend service for ticket lifecycle management and operational analytics built with:
@@ -21,6 +52,7 @@ The project explores:
 Tested with approximately:
 
 * **1,000,000 ticket lifecycle events**
+
 
 ## Engineering Practices
 
@@ -116,4 +148,6 @@ Analytics and Reporting Endpoints
 ## Query Analysis
 
 ![Explain Analyze](screenshots/explain.png)
+
+
 
