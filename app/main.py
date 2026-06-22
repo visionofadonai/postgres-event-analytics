@@ -6,11 +6,10 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi.extension import _rate_limit_exceeded_handler
 
-from app.async_db import init_db, close_db
+from app.async_db import init_db, close_db, get_conn, release_conn 
 from app.middleware import log_requests
 from app.api.v1.events import router as events_router
 from app.api.v1.tickets import router as tickets_router
-from app.config import APP_TITLE
 from app.limiter import limiter
 
 logging.basicConfig(
@@ -55,3 +54,12 @@ app.add_middleware(SlowAPIMiddleware)
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+@app.get("/ready")
+async def ready():
+    conn = await get_conn()
+    try:
+        await conn.fetch("SELECT 1")
+    finally:
+        await release_conn(conn)
+    return {"status": "ready", "database": "reachable"}
